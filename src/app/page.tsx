@@ -1,6 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
+import { Icons } from "@/components/Icons";
 import MaxWithWrapper from "@/components/MaxWithWrapper";
 import Phone from "@/components/Phone";
+import { Reviews } from "@/components/Reviews/Reviews";
+import Testimonials from "@/components/Testimonials";
 import { Check, Star } from "lucide-react";
 
 export default function Home() {
@@ -107,6 +110,43 @@ export default function Home() {
             </div>
           </div>
         </MaxWithWrapper>
+      </section>
+
+      {/** Value proposition section */}
+      <section className="bg-slate-100 py-24">
+        <MaxWithWrapper className="flex flex-col items-center gap-16 sm:gap-32">
+          <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6">
+            <h2 className="order-1 mt-2 tracking-tight text-center text-balance !leading-tight font-bold text-5xl md:text-6xl text-gray-900">
+              What our{" "}
+              <span className="relative px-2">
+                customers
+                <Icons.underline className="hidden sm:block pointer-events-none absolute inset-x-0 -bottom-6 text-green-500" />
+              </span>{" "}
+              say
+            </h2>
+            <img
+              src="/images/snake-2.png"
+              alt="snack"
+              className="w-24 order-0 lg:order-2"
+            />
+          </div>
+
+          <div className="nx-auto grid max-w-2xl grid-cols-1 px-4 lg:mx-0 lg:max-w-none lg:grid-cols-2 gap-y-16">
+            <Testimonials
+              name="Jonathan"
+              image="/images/users/user-1.png"
+              message="The case feels durable and I even got a compliment on the design. Had the case for two and a half months now and the image is super clear, on the case I had before, the image started fading into yellow-ish color after a couple weeks. Love it."
+            />
+            <Testimonials
+              name="Johana"
+              image="/images/users/user-3.png"
+              message="I usually keep my phone together with my keys in my pocket and that led to some pretty heavy scratchmarks on all of my last phone cases. This one, besides a barely noticeable scratch on the corner, looks brand new after about half a year. I dig it."
+            />
+          </div>
+        </MaxWithWrapper>
+        <div className="pt-16">
+          <Reviews />
+        </div>
       </section>
     </div>
   );
