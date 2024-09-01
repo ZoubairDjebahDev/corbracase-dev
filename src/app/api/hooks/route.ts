@@ -10,20 +10,18 @@ export async function POST(req: Request) {
     const signature = headers().get("stripe-signature");
 
     if (!signature) {
-      return new Response("Invalide signature", { status: 400 });
+      return new Response("Invalid signature", { status: 400 });
     }
 
     const event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOKS_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET!
     );
 
     if (event.type === "checkout.session.completed") {
       if (!event.data.object.customer_details?.email) {
-        const error = new Error("Missing user email");
-        console.log(error);
-        throw error;
+        throw new Error("Missing user email");
       }
 
       const session = event.data.object as Stripe.Checkout.Session;
@@ -34,9 +32,7 @@ export async function POST(req: Request) {
       };
 
       if (!userId || !orderId) {
-        const error = new Error("Invalid requeste metadata");
-        console.log(error);
-        throw error;
+        throw new Error("Invalid request metadata");
       }
 
       const billingAddress = session.customer_details!.address;
@@ -55,7 +51,7 @@ export async function POST(req: Request) {
               country: shippingAddress!.country!,
               postalCode: shippingAddress!.postal_code!,
               street: shippingAddress!.line1!,
-              state: shippingAddress!.state!,
+              state: shippingAddress!.state,
             },
           },
           billingAddress: {
@@ -65,7 +61,7 @@ export async function POST(req: Request) {
               country: billingAddress!.country!,
               postalCode: billingAddress!.postal_code!,
               street: billingAddress!.line1!,
-              state: billingAddress!.state!,
+              state: billingAddress!.state,
             },
           },
         },
@@ -73,11 +69,11 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ result: event, ok: true });
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
 
     return NextResponse.json(
-      { message: "Something went wrong" },
+      { message: "Something went wrong", ok: false },
       { status: 500 }
     );
   }
