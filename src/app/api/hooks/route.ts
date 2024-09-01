@@ -3,9 +3,6 @@ import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import * as dotenv from "dotenv";
-
-dotenv.config();
 
 export async function POST(req: Request) {
   try {
